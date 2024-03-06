@@ -48,10 +48,16 @@ class NewsController extends Controller
     {
         $this->validate($request,[
             'title' => 'required',
-            'image' => 'required|image|minen=s:jpeg,png,jpg|max:5120',
+            'image' => 'required|image|mines=s:jpeg,png,jpg|max:5120',
             'content' => 'required',
             'category_id' => 'required',
         ]);
+
+        //upload image
+        $image = $request->file('image');
+        //fungsi untuk menimpan image ke dalam foder public/news
+        //fungsi hashName() berfungsi untuk memberikan nama acak pada image
+        $image->storeAs('public/news', $image->hashName());
     }
 
     /**
