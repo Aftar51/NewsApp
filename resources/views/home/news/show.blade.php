@@ -1,17 +1,40 @@
 @extends('home.parent')
 
 @section('content')
-<div class="row">
-    <div class="card p-4">
-        <h5 class="card-title">
-            ini judul berita
-        </h5>
+    <div class="row">
+        <div class="card p-4">
+            <h5 class="card-title">
+                {{ $news->title }} -<span class="badge rounded-pill bg-info text-white">{{ $news->category->name }}</span>
+            </h5>
 
-        <p>
-            <img src="" alt="ini gambar berita">
-        </p>
+            <div id="editor" readonly>
+                <img src="{{ $news->image }}" alt="ini gambar berita">
+            </div>
 
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur voluptatem hic aspernatur ea quidem dignissimos magnam a ipsa aut perspiciatis illum reiciendis, numquam impedit itaque doloremque eius esse debitis in fugit quasi accusamus assumenda. Esse sed quidem debitis voluptate. Ab, quo incidunt? Totam perspiciatis officia repellendus, facere consequuntur ex harum tempore fuga unde officiis magnam debitis cum inventore quibusdam, architecto sequi omnis nesciunt recusandae, aliquid cupiditate. Suscipit soluta ex deleniti non ducimus placeat quis eligendi facilis! Odit repudiandae expedita illum nam. Nihil ducimus rerum voluptatibus saepe aperiam minus? Magnam nemo magni necessitatibus mollitia vero, eligendi suscipit. Nisi impedit corporis dicta!</p>
+            <style>
+                #editor {}
+            </style>
+
+            <script>
+                ClassicEditor
+                    .create(document.querySelector('#editor'))
+                    .then(editor => {
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            </script>
+
+            <div class="container mt-2">
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('news.index') }}" class="btn bg-info">
+                        <i class="bi bi-arrow-left">Back</i>
+                    </a>
+                </div>
+            </div>
+
+            <p>{!! $news->content !!}</p>
+        </div>
     </div>
-</div>
 @endsection

@@ -11,13 +11,13 @@
                 @endforeach
             @endif
 
-            <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('POST')
+                @method('PUT')
 
                 <div class="md-2">
                     <label for="inputTitle" class="form-label">News Title</label>
-                    <input type="text" class="form-control" id="inputTitle" name="title" value="{{ old('title') }}">
+                    <input type="text" class="form-control" id="inputTitle" name="title" value="{{ $news->title }}">
                 </div>
 
                 <div class="md-2">
@@ -29,7 +29,8 @@
                     <label class="col-sm-2 col-form-label">select</label>
                     <div class="col-sm-10">
                         <select class="form-select" aria-label="Default select explane" name="category_id">
-                            <option selected>name select</option>
+                            <option selected value="{{ $news->category->name }}">{{ $news->category->name }}</option>
+                            <option selected>===== choose Category =====</option>
                             @foreach ($category as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
@@ -39,7 +40,9 @@
 
                 <div class="md-2">
                     <label class="col col-form-label">Content News</label>
-                    <textarea id="editor" name="content"></textarea>
+                    <textarea id="editor" name="content">
+                        {!! $news->content !!}
+                    </textarea>
                 </div>
 
                 <div class="d-flex justify-content-end">
