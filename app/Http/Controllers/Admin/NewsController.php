@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\News;
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,8 +18,12 @@ class NewsController extends Controller
     public function index()
     {
         $title = 'News - Index';
+        $news = News::latest()->paginate(5);
+        $category = Category::all();
         return view('home.news.index', compact(
-            'title'
+            'title',
+            'news',
+            'category'
         ));
     }
 
@@ -48,7 +54,7 @@ class NewsController extends Controller
     {
         $this->validate($request,[
             'title' => 'required',
-            'image' => 'required|image|mines=s:jpeg,png,jpg|max:5120',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:5120',
             'content' => 'required',
             'category_id' => 'required',
         ]);
@@ -58,6 +64,17 @@ class NewsController extends Controller
         //fungsi untuk menimpan image ke dalam foder public/news
         //fungsi hashName() berfungsi untuk memberikan nama acak pada image
         $image->storeAs('public/news', $image->hashName());
+
+        //create data ke dalam table news
+        News::create([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'image' => $image->hashName(), 
+            'content'=> $request->content
+        ]);
+
+        return redirect()->route('news.index');
     }
 
     /**
@@ -68,7 +85,10 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        //
+        $title = 'News - Show';
+        return view('home.news.show', compact(
+            'title'
+        ));
     }
 
     /**

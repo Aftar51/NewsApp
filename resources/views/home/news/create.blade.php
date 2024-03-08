@@ -5,13 +5,19 @@
         <div class="card p-4">
             <h3>News Create</h3>
 
-            <form action="{{ 'news.store' }}" method="POST" enctype="multipart/form-data">
+            @if ($errors->any())
+                @foreach ($errors->all() as $e)
+                    {{ $e }}
+                @endforeach
+            @endif
+
+            <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
 
                 <div class="md-2">
                     <label for="inputTitle" class="form-label">News Title</label>
-                    <input type="text" class="form-control" id="inputTitle" name="Title" value="{{ old('title') }}">
+                    <input type="text" class="form-control" id="inputTitle" name="title" value="{{ old('title') }}">
                 </div>
 
                 <div class="md-2">
@@ -19,12 +25,17 @@
                     <input type="file" class="form-control" id="inputimage" name="image" value="{{ old('image') }}">
                 </div>
 
-                @foreach ($category as $row)
-                    <div class="col">
-                        ID = {{ $row->id }}
-                        NAME = {{ $row->name }}
+                <div class="mb-2">
+                    <label class="col-sm-2 col-form-label">select</label>
+                    <div class="col-sm-10">
+                        <select class="form-select" aria-label="Default select explane" name="category_id">
+                            <option selected>name select</option>
+                            @foreach ($category as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                @endforeach
+                </div>
 
                 <div class="md-2">
                     <label class="col col-form-label">Content News</label>
