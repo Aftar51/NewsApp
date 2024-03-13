@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\NewsController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\CategoryController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/Profile', [\App\Http\Controllers\Profile\ProfileController::class, 'index'])->name('profile.index');
 
     //Route for admin
     // middleware admin diamana kita membuat middleware sendiri
@@ -44,6 +47,6 @@ Route::middleware('auth')->group(function () {
             //Route for News using Resource
             Route::resource('news', NewsController::class);
             //Route for Category using Resource
-            Route::resource('category', CategoryController::class);
+            Route::resource('category', CategoryController::class)->except('show');
     });
 });

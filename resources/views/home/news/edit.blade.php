@@ -29,8 +29,8 @@
                     <label class="col-sm-2 col-form-label">select</label>
                     <div class="col-sm-10">
                         <select class="form-select" aria-label="Default select explane" name="category_id">
-                            <option selected value="{{ $news->category->name }}">{{ $news->category->name }}</option>
-                            <option selected>===== choose Category =====</option>
+                            <option selected value="{{ $news->category->id }}">{{ $news->category->name }}</option>
+                            <option >===== choose Category =====</option>
                             @foreach ($category as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
@@ -46,9 +46,9 @@
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="bi bi-plus"></i>
-                        Crate News
+                    <button class="btn btn-warning" type="submit">
+                        <i class="bi bi-pencil"></i>
+                        Update News
                     </button>
                 </div>
             </form>
