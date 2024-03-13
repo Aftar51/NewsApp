@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/Profile', [\App\Http\Controllers\Profile\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/change-password', [\App\Http\Controllers\Profile\ProfileController::class, 'changePassword'])->name('profile.change-password');
 
     //Route for admin
     // middleware admin diamana kita membuat middleware sendiri
