@@ -10,7 +10,7 @@ class Profile extends Model
 {
     use HasFactory;
 
-    protected $fillabel = [
+    protected $fillable = [
         'user_id',
         'first_name',
         'image'
@@ -24,7 +24,7 @@ class Profile extends Model
     // Accessor Image profile
     public function Image() : Attribute{
         return Attribute::make(
-            get: fn($value) => asset('/storage/profile' . $value)
+            get: fn($value) => asset('/storage/profile/' . $value)
         );
     }
 }
