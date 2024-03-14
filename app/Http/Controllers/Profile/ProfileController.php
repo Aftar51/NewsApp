@@ -59,4 +59,12 @@ class ProfileController extends Controller
             return redirect()->back()->with('error', 'Current password is wrong');
         }
     }
+
+    public function allUser(){
+        $title = 'All User';
+
+        return view('home.user.home', compact(
+            'title',
+        ));
+    }
 }

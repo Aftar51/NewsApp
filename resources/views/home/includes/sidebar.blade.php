@@ -15,8 +15,8 @@
         @if (Auth::user()->role == 'admin')
             {{-- ALL USER --}}
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{{ route('home') }}">
-                    <i class="ri-account-box-fill"></i>
+                <a class="nav-link collapsed" href="{{ route('allUser') }}">
+                    <i class="ri-account-box-line"></i>
                     <span>User</span>
                 </a>
             </li>

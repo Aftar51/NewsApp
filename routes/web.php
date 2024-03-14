@@ -50,5 +50,7 @@ Route::middleware('auth')->group(function () {
             Route::resource('news', NewsController::class);
             //Route for Category using Resource
             Route::resource('category', CategoryController::class)->except('show');
+            // get all user
+            Route::get('/all-user',[\App\Http\Controllers\Profile\ProfileController::class, 'allUser'])->name('allUser');
     });
 });
