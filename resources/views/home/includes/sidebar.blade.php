@@ -13,6 +13,13 @@
         {{-- jika user adalah admin  --}}
         {{-- maka akan menampilkan menu category dan news --}}
         @if (Auth::user()->role == 'admin')
+            {{-- ALL USER --}}
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('home') }}">
+                    <i class="ri-account-box-fill"></i>
+                    <span>User</span>
+                </a>
+            </li>
             {{-- CATEGORY & NEWS --}}
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
