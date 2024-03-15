@@ -20,10 +20,17 @@
                     {{-- // untuk menampilkan role account user yang sedang login --}}
                     <li class="list-group-item">Role Account = <strong>{{ Auth::user()->role }}</strong></li>
                 </ul>
-                <a href="{{ route('createProfile') }}" class="btn btn-info m-2">
-                    <i class="bi bi-plus"></i>
-                    Create Profile
+                @if (empty(Auth::user()->profile->image))
+                    <a href="{{ route('createProfile') }}" class="btn btn-info m-2">
+                        <i class="bi bi-plus"></i>
+                        Create Profile
+                    </a>
+                @else
+                <a href="{{ route('editProfile') }}" class="btn btn-warning mt-2">
+                    <i class="bi bi-pencil"></i>
+                    Create Update
                 </a>
+                @endif
             </div>
         </div>
     </div>

@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/update-password', [\App\Http\Controllers\Profile\ProfileController::class, 'updatePassword'])->name('profile.update-password');
     Route::get('/create-Profile', [\App\Http\Controllers\Profile\ProfileController::class, 'createProfile'])->name('createProfile');
     Route::post('/store-Profile',[\App\Http\Controllers\Profile\ProfileController::class, 'storeProfile'])->name('storeProfile');
+    Route::get('/edit-Profile',[\App\Http\Controllers\Profile\ProfileController::class, 'editProfile'])->name('editProfile');
+    Route::put('/update-Profile',[\App\Http\Controllers\Profile\ProfileController::class, 'updateProfile'])->name('updateProfile');
 
     //Route for admin
     // middleware admin diamana kita membuat middleware sendiri

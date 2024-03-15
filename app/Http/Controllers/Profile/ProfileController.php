@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -116,5 +117,58 @@ class ProfileController extends Controller
             'success',
             'Profile Has Been Created'
         );
+    }
+
+    public function editProfile(){
+        // get data user login
+        $user = auth()->user();
+
+        $title = 'edit Profile';
+
+        return view('home.profile.edit', compact(
+            'user',
+            'title'
+        ));
+    }
+
+    public function updateProfile(Request $request){
+        //validate
+        $this->validate($request, [
+            'first_name' => 'required',
+            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+
+        // get user login
+        $user = auth()->user();
+
+        //cek kondisi bila tidak di uploud
+        if($request->file('image') == ''){
+            $user->profile->update([
+                'first_name' => $request->first_name
+            ]);
+
+            return redirect()->route('profile.index')->with(
+                'success',
+                'Profile has been update'
+            );
+        } else {
+            // delete image
+            Storage::delete('public/profile/' . basename($user->profile->image));
+
+            //store image
+            $image = $request->file('image');
+            $image->storeAs('public/profile/', $image->getClientOriginalName());
+
+            //update data
+            $user->profile->update([
+                'first_name' => $request->first_name,
+                'image' => $image->getClientOriginalName()
+            ]);
+
+            return redirect()->route('profile.index')->with(
+                'success',
+                'Profile has been updated'
+            );
+        }
     }
 }
