@@ -17,9 +17,7 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 |
 */
 
-Route::get('/', function () {
-    return view('frontend.welcome');
-});
+Route::get('/',[\App\Http\Controllers\Frontend\FrontendController::class, 'index']);
 
 Auth::routes();
 
