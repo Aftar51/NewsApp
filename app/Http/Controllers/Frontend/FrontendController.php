@@ -13,12 +13,12 @@ class FrontendController extends Controller
 
         //get data category
         $category = Category::latest()->get();
-        // get data news by Category
-        $categoryNews = News::with('category')->latest()->get();
+        //slider news latest
+        $sliderNews = News::latest()->limit(3)->get();
 
         return view('frontend.news.index', compact(
             'category',
-            'categoryNews'
+            'sliderNews',
         ));
     }
 }
