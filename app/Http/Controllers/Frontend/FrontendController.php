@@ -21,4 +21,35 @@ class FrontendController extends Controller
             'sliderNews',
         ));
     }
+
+    public function detailNews($slug){
+
+        // get data category
+        $category = Category::latest()->get();
+
+        //get data news
+        $news = News::where('slug', $slug)->first();
+
+        return view('frontend.news.detail', compact(
+            'category',
+            'news'
+        ));
+    }
+
+    public function detailCategory($slug){
+        // get data category
+        $category = Category::latest()->get();
+
+        // get data category by slug
+        $detailCategory = Category::where('slug', $slug)->first();
+
+        //get data news by category
+        $news = News::where('category_id', $detailCategory)->latest()->get();
+
+        return view('frontend.news.detail-category', compact(
+            'category',
+            'detailCategory',
+            'news'
+        ));
+    }
 }

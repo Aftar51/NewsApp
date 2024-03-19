@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Profiler\Profile;
 */
 
 Route::get('/',[\App\Http\Controllers\Frontend\FrontendController::class, 'index']);
+Route::get('/detail/news/{slug}', [\App\Http\Controllers\Frontend\FrontendController::class, 'detailNews'])->name('detailNews');
+Route::get('/detail/category/{slug}', [\App\Http\Controllers\Frontend\FrontendController::class, 'detailCategory'])->name('detailCategory');
 
 Auth::routes();
 

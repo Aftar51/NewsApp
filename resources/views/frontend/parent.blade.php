@@ -47,8 +47,6 @@
 
   <main id="main">
 
-      
-
     <!-- ======= Culture Category Section ======= -->
     @yield('content')
     <!-- End Culture Category Section -->
