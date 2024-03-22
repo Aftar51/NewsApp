@@ -24,4 +24,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::post('/login', [App\Http\Controllers\API\AuthController::class,'login']);
 Route::post('/register', [App\Http\Controllers\API\AuthController::class,'register']);
-Route::get('/allUser', [App\Http\Controllers\API\AuthController::class, 'allUsers']);
+Route::get('/allUsers', [App\Http\Controllers\API\AuthController::class, 'allUsers']);
+
+// get data news
+Route::get('/allNews', [App\Http\Controllers\API\NewsContoller::class, 'index']);
+// get data news by id
+Route::get('/news/{id}',[App\Http\Controllers\API\NewsContoller::class, 'show']);
+// create news
+
