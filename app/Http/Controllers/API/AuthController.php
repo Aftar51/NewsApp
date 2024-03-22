@@ -70,11 +70,43 @@ class AuthController extends Controller
                     'message' => 'Password not match'
                 ], 'Authentication Failed', 401);
             }
+
+            //create akun
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
+
+            //get data akun
+            $user = User::where('email', $request->email)->first();
+
+            //create token
+            $tokenResult = $user->createToken('authToken')->plainTextToken;
+            return ResponseFormatter::success([
+                'access_token' => $tokenResult,
+                'token_type' => 'Bearer',
+                'user' => $user
+            ], 'Authenticated', 200);
+
+            
         } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'massage' => 'Something went wrong',
                 'error' => $error
             ], 'Authenticated Failed', 500);
         }
+    }
+
+    public function logout(Request $request){
+        $token = $request->user()->currentAccessToken()->delete();
+        return ResponseFormatter::success($token, 'Token Revoked');
+    }
+
+    public function allUsers(){
+        $users = User::where('role', 'user')->get();
+        return ResponseFormatter::success(
+            $users, 'Data user berhasil di ambil'
+        );
     }
 }
