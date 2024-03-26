@@ -79,7 +79,7 @@
                         @endforeach 
 
                         <div class="row">
-                            @foreach ($row->news->random(1) as $news)
+                            @foreach ($row->news->random(0) as $news)
                                 <div class="col-lg-4">
                                     <div class="post-entry-1 border-bottom">
                                         <a href="{{ route('detailNews', $news->slug) }}"><img src="{{ $news->image }}" alt=""
@@ -105,7 +105,7 @@
                                 </div>
                             @endforeach
 
-                            @foreach ($row->news->random(1) as $news)
+                            @foreach ($row->news->random(0) as $news)
                             <div class="col-lg-8">
                                 <div class="post-entry-1">
                                     <a href="{{ route('detailNews', $news->slug) }}"><img

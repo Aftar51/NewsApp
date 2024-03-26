@@ -13,19 +13,20 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request){
-        try{
+    public function login(Request $request)
+    {
+        try {
             //validate
-            $this->validate($request,[
+            $this->validate($request, [
                 'email' => 'required|email',
                 'password' => 'required'
             ]);
             // cek credentials (login)
             $credentials = request(['email', 'password']);
-            if(!Auth::attempt([
+            if (!Auth::attempt([
                 'email' => $credentials['email'],
                 'password' => $credentials['password']
-            ])){
+            ])) {
                 return ResponseFormatter::error([
                     'massage' => 'Unauthorized'
                 ], 'Authentication Failed', 401);
@@ -33,7 +34,7 @@ class AuthController extends Controller
 
             //cek jika password tidak sesuai
             $user = User::where('email', $credentials['email'])->first();
-            if(!Hash::check($request->password, $user->password, [])){
+            if (!Hash::check($request->password, $user->password, [])) {
                 throw new \Exception('Invalid Credentials');
             };
 
@@ -44,20 +45,19 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'user' => $user
             ], 'Authenticated', 200);
-
-        } catch(Exception $error) {
+        } catch (Exception $error) {
             return ResponseFormatter::error([
                 'massage' => 'Something went wrong',
                 'error' => $error
             ], 'Authenticated Failed', 500);
         }
-        
     }
 
-    public function register(Request $request) {
-        try{
+    public function register(Request $request)
+    {
+        try {
             //validate
-            $this->validate($request,[
+            $this->validate($request, [
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string|min:6',
@@ -65,7 +65,7 @@ class AuthController extends Controller
             ]);
 
             //cek kondisi password dan confirm password
-            if($request->password != $request->confirm_password){
+            if ($request->password != $request->confirm_password) {
                 return ResponseFormatter::error([
                     'message' => 'Password not match'
                 ], 'Authentication Failed', 401);
@@ -88,8 +88,6 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'user' => $user
             ], 'Authenticated', 200);
-
-            
         } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'massage' => 'Something went wrong',
@@ -98,15 +96,60 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $token = $request->user()->currentAccessToken()->delete();
         return ResponseFormatter::success($token, 'Token Revoked');
     }
 
-    public function allUsers(){
+    public function updatePassword(Request $request)
+    {
+        try {
+            //validate
+            $this->validate($request,[
+                'old_password' => 'required',
+                'new_password' => 'required|string|min:6',
+                'confirm_password' => 'required|string|min:6'
+            ]);
+
+            $user = Auth::user();
+
+            // cek password lama
+            if (!Hash::check($request->old_password, $user->password)){
+                return ResponseFormatter::error([
+                    'message' => 'Password lama tidak sesuai'
+                ], 'Authentication Failed', 401);
+            }
+
+            // cek password baru dan konfirmasi password
+            if($request->new_password != $request->confirm_password){
+                return ResponseFormatter::error([
+                    'message' => 'Password tidak sesuai'
+                ], 'Authentication Failed', 401);
+            };
+
+            // update password
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return ResponseFormatter::success([
+                'message' => 'Password berhasil di ubah'
+            ], 'Authenticated');
+
+        } catch (\Exception $error) {
+            return ResponseFormatter::error([
+                'massage' => 'Something went wrong',
+                'error' => $error
+            ], 'Authenticated Failed', 500);
+        }
+    }
+
+    public function allUsers()
+    {
         $users = User::where('role', 'user')->get();
         return ResponseFormatter::success(
-            $users, 'Data user berhasil di ambil'
+            $users,
+            'Data user berhasil di ambil'
         );
     }
 }
