@@ -26,9 +26,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 // route admin
 Route::group(['middleware' => ['auth:sanctum', 'admin']], function(){
+    // Route Category
     Route::post('/category/create', [App\Http\Controllers\API\CategoryController::class, 'store']);
     Route::post('/category/update/{id}', [App\Http\Controllers\API\CategoryController::class, 'update']);
     Route::delete('/category/destroy/{id}', [App\Http\Controllers\API\CategoryController::class, 'destroy']);
+
+    // Route Category
+    Route::post('/news/create', [App\Http\Controllers\API\NewsContoller::class, 'store']);
+    Route::post('/news/update/{id}', [App\Http\Controllers\API\NewsContoller::class, '']);
+    Route::delete('/news/destroy/{id}', [App\Http\Controllers\API\NewsContoller::class, '']);
 });
 
 Route::post('/login', [App\Http\Controllers\API\AuthController::class,'login']);
