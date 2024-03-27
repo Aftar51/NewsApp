@@ -102,6 +102,46 @@ class NewsContoller extends Controller
     public function update(Request $request, $id)
     {
         try {
+            // validate
+            $this->validate($request, [
+                'title' => 'required',
+                'category_id' => 'required',
+                'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'content' => 'required'
+            ]);
+
+            //get data by id
+            $news = News::findOrFail($id);
+
+            if ($request->file('image') == '') {
+                $news->update([
+                    'title' => $request->title,
+                    'slug' => Str::slug($request->title),
+                    'category_id' => $request->category_id,
+                    'content' => $request->content
+                ]);
+            } else {
+                // delete old image
+                Storage::disk('local')->delete('public/news/' . basename($news->image));
+
+                //upload new image
+                $image = $request->file('image');
+                $image->storeAs('public/news/', $image->hashName());
+
+                //update data
+                $news->update([
+                    'title',
+                    'category_id',
+                    '',
+                    'image',
+                    'content',
+                ]);
+            }
+
+            return ResponseFormatter::success(
+                $news,
+                'Data News Has Been Update'
+            );
 
         }  catch (\Exception $error) {
             return ResponseFormatter::error([
