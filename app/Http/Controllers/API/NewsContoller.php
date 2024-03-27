@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class NewsContoller extends Controller
 {
@@ -77,6 +78,27 @@ class NewsContoller extends Controller
         }
     }
 
+    public function destroy($id)
+    {
+        try {
+            // get data by id
+            $news = News::findOrFail($id);
+            // delete image
+            Storage::disk('local')->delete('public/news/' . basename($news->image));
+            //delete data
+            $news->delete();
+
+            return ResponseFormatter::success(
+                null, 'Data News Has Been Deleted'
+            );
+        }  catch (\Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'something went wrong',
+                'error' => $error
+            ], 'Authentication Failed', 500);
+        }
+    }
+
     public function update(Request $request, $id)
     {
         try {
@@ -89,15 +111,4 @@ class NewsContoller extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        try {
-
-        }  catch (\Exception $error) {
-            return ResponseFormatter::error([
-                'message' => 'something went wrong',
-                'error' => $error
-            ], 'Authentication Failed', 500);
-        }
-    }
 }

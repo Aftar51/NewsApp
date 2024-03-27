@@ -33,8 +33,8 @@ Route::group(['middleware' => ['auth:sanctum', 'admin']], function(){
 
     // Route Category
     Route::post('/news/create', [App\Http\Controllers\API\NewsContoller::class, 'store']);
+    Route::delete('/news/destroy/{id}', [App\Http\Controllers\API\NewsContoller::class, 'destroy']);
     Route::post('/news/update/{id}', [App\Http\Controllers\API\NewsContoller::class, '']);
-    Route::delete('/news/destroy/{id}', [App\Http\Controllers\API\NewsContoller::class, '']);
 });
 
 Route::post('/login', [App\Http\Controllers\API\AuthController::class,'login']);

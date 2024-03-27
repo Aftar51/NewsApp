@@ -132,7 +132,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
             // delete image
             Storage::disk('local')->delete('public/category/' . basename($category->image));
-            //delete data
+            // delete data
             $category ->delete();
 
             return ResponseFormatter::success(
