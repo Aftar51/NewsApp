@@ -100,7 +100,7 @@ class NewsContoller extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {   
         try {
             // validate
             $this->validate($request, [
@@ -130,11 +130,11 @@ class NewsContoller extends Controller
 
                 //update data
                 $news->update([
-                    'title',
-                    'category_id',
-                    '',
-                    'image',
-                    'content',
+                    'title' => $request->title,
+                    'slug' => Str::slug($request->title),
+                    'category_id' => $request->category_id,
+                    'content' => $request->content,
+                    'image' => $image->hashName()
                 ]);
             }
 
