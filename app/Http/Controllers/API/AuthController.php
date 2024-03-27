@@ -9,6 +9,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -105,7 +106,7 @@ class AuthController extends Controller
     {
         try {
             //validate
-            $this->validate($request,[
+            $this->validate($request, [
                 'old_password' => 'required',
                 'new_password' => 'required|string|min:6',
                 'confirm_password' => 'required|string|min:6'
@@ -114,14 +115,14 @@ class AuthController extends Controller
             $user = Auth::user();
 
             // cek password lama
-            if (!Hash::check($request->old_password, $user->password)){
+            if (!Hash::check($request->old_password, $user->password)) {
                 return ResponseFormatter::error([
                     'message' => 'Password lama tidak sesuai'
                 ], 'Authentication Failed', 401);
             }
 
             // cek password baru dan konfirmasi password
-            if($request->new_password != $request->confirm_password){
+            if ($request->new_password != $request->confirm_password) {
                 return ResponseFormatter::error([
                     'message' => 'Password tidak sesuai'
                 ], 'Authentication Failed', 401);
@@ -134,7 +135,6 @@ class AuthController extends Controller
             return ResponseFormatter::success([
                 'message' => 'Password berhasil di ubah'
             ], 'Authenticated');
-
         } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'massage' => 'Something went wrong',
@@ -150,5 +150,42 @@ class AuthController extends Controller
             $users,
             'Data user berhasil di ambil'
         );
+    }
+
+    public function storeProfile(Request $request)
+    {
+        try {
+            //validate
+            $this->validate($request, [
+                'first_name' => 'required',
+                'image' => 'required|image|max:2048|mimes:jpg,jpeg,png'
+            ]);
+
+            // get data user
+            $user = auth()->user();
+
+            //upload image
+            $image = $request->file('image');
+            $image->storeAs('public/profile', $image->hashName());
+
+            // create profile
+            $user->profile()->create([
+                'first_name' => $request->first_name,
+                'image' => $image->hashName()
+            ]);
+
+            // get data profile
+            $profile = $user->profile;
+
+            return ResponseFormatter::success(
+                $profile,
+                'Profile berhasil diupdate'
+            );
+        } catch (\Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something went wrong',
+                'error' => $error
+            ], 'Authentication Failed', 500);
+        }
     }
 }
