@@ -125,7 +125,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function destroy($id) 
+    public function destroy($id)
     {
         try {
             // get data by id
@@ -133,13 +133,13 @@ class CategoryController extends Controller
             // delete image
             Storage::disk('local')->delete('public/category/' . basename($category->image));
             // delete data
-            $category ->delete();
+            $category->delete();
 
             return ResponseFormatter::success(
-                null, 'Data Category Berhasil Dihapus'
+                null,
+                'Data Category Berhasil Dihapus'
             );
-
-        }  catch (\Exception $error) {
+        } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'something went wrong',
                 'error' => $error

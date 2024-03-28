@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsContoller extends Controller
 {
-    public function index() 
+    public function index()
     {
         try {
             $news = News::latest()->get();
             return ResponseFormatter::success(
-                $news, 'Data list of news'
+                $news,
+                'Data list of news'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::error([
@@ -26,20 +27,21 @@ class NewsContoller extends Controller
         }
     }
 
-    public function show($id) 
+    public function show($id)
     {
         try {
             //get data by id
             $news = News::findOrFail($id);
             return ResponseFormatter::success(
-                $news, 'Data news by id'
+                $news,
+                'Data news by id'
             );
         } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'something went wrong',
                 'error' => $error
             ], 'Authentication Failed', 500);
-        } 
+        }
     }
 
     public function store(Request $request)
@@ -67,10 +69,10 @@ class NewsContoller extends Controller
             ]);
 
             return ResponseFormatter::success(
-                $news, 'Data News Has Been created'
+                $news,
+                'Data News Has Been created'
             );
-
-        }  catch (\Exception $error) {
+        } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'something went wrong',
                 'error' => $error
@@ -89,9 +91,10 @@ class NewsContoller extends Controller
             $news->delete();
 
             return ResponseFormatter::success(
-                null, 'Data News Has Been Deleted'
+                null,
+                'Data News Has Been Deleted'
             );
-        }  catch (\Exception $error) {
+        } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'something went wrong',
                 'error' => $error
@@ -100,7 +103,7 @@ class NewsContoller extends Controller
     }
 
     public function update(Request $request, $id)
-    {   
+    {
         try {
             // validate
             $this->validate($request, [
@@ -142,13 +145,11 @@ class NewsContoller extends Controller
                 $news,
                 'Data News Has Been Update'
             );
-
-        }  catch (\Exception $error) {
+        } catch (\Exception $error) {
             return ResponseFormatter::error([
                 'message' => 'something went wrong',
                 'error' => $error
             ], 'Authentication Failed', 500);
         }
     }
-
 }
