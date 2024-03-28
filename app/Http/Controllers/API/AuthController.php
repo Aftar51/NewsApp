@@ -164,6 +164,12 @@ class AuthController extends Controller
             // get data user
             $user = auth()->user();
 
+            if (!$user->profile) {
+                return ResponseFormatter::error([
+                    'message' => 'Profile not found, please create profile first'
+                ], 'Authentication Failed', 404);
+            }
+
             //upload image
             $image = $request->file('image');
             $image->storeAs('public/profile', $image->hashName());
